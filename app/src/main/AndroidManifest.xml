@@ -10,7 +10,7 @@
                 <category android:name="com.htc.intent.category.VRAPP" />
             </intent-filter>
             <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
-
+            <meta-data android:name="unityplayer.SkipPermissionsDialog" android:value="true" />
         </activity>
         <meta-data android:name="com.htc.vr.content.NumDoFHmd" android:value="6DoF" />
         <meta-data android:name="com.htc.vr.content.NumDoFController" android:value="6DoF" />
@@ -30,6 +30,7 @@
     <uses-feature android:name="android.hardware.microphone" android:required="true" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-sdk android:minSdkVersion="23" android:targetSdkVersion="25" />
     <uses-feature android:glEsVersion="0x00020000" />
     <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
