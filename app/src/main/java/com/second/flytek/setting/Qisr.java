@@ -78,7 +78,6 @@ public class Qisr {
                     mContext.MSG_ISRErrorCallback("识别失败,错误码: " + mReturn);
                 }
             }
-
             /*mReturn = mAsr.startListening(mRecognizerListener);
             if (mReturn != ErrorCode.SUCCESS) {
                 mContext.setText("识别失败,错误码: " + mReturn);
