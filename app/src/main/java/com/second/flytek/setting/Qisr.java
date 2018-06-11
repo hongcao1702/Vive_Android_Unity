@@ -39,7 +39,6 @@ public class Qisr {
     // 函数调用返回值
     private int mReturn = 0;
 
-
     public Qisr(FlyTekActivity context) {
         mContext = context;
         // 初始化合成对象
@@ -56,15 +55,30 @@ public class Qisr {
         mAsr.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
         mAsr.setParameter(SpeechConstant.TEXT_ENCODING,"utf-8");
         mReturn = mAsr.buildGrammar(GRAMMAR_TYPE_ABNF, mCloudGrammar, mCloudGrammarListener);
-        if(mReturn != ErrorCode.SUCCESS)
-            mContext.setText("语法构建失败,错误码：" + mReturn);
+        if(mReturn != ErrorCode.SUCCESS) {
+            mContext.MSG_ISRErrorCallback("语法构建失败,错误码：" + mReturn);
+        }
 
     }
 
     public void startRecognize() {
         if(mAsr != null) {
             mContext.setText("");
-            buildGrammar();
+            if(TextUtils.isEmpty(mGrammarID)){
+                buildGrammar();
+            } else {
+                mAsr.setParameter(SpeechConstant.ENGINE_TYPE, SpeechConstant.TYPE_CLOUD);
+                //设置返回结果为json格式
+                mAsr.setParameter(SpeechConstant.RESULT_TYPE, "json");
+                mAsr.setParameter(SpeechConstant.AUDIO_FORMAT,"wav");
+                mAsr.setParameter(SpeechConstant.ASR_AUDIO_PATH, mAsrPath);
+                mAsr.setParameter(SpeechConstant.CLOUD_GRAMMAR, mGrammarID);
+                mReturn = mAsr.startListening(mRecognizerListener);
+                if (mReturn != ErrorCode.SUCCESS) {
+                    mContext.MSG_ISRErrorCallback("识别失败,错误码: " + mReturn);
+                }
+            }
+
             /*mReturn = mAsr.startListening(mRecognizerListener);
             if (mReturn != ErrorCode.SUCCESS) {
                 mContext.setText("识别失败,错误码: " + mReturn);
@@ -89,6 +103,7 @@ public class Qisr {
         if(!TextUtils.isEmpty(fileName) && !mGrammarName.equals(fileName)) {
             mGrammarName = fileName;
             mCloudGrammar = FucUtil.readFile(mContext,mGrammarName,"utf-8");
+            mGrammarID = null;
         }
     }
 
@@ -121,10 +136,11 @@ public class Qisr {
                 mAsr.setParameter(SpeechConstant.CLOUD_GRAMMAR, grammarId);
                 mReturn = mAsr.startListening(mRecognizerListener);
                 if (mReturn != ErrorCode.SUCCESS) {
-                    mContext.setText("识别失败,错误码: " + mReturn);
+                    mContext.MSG_ISRErrorCallback("识别失败,错误码: " + mReturn);
                 }
             }else{
-                mContext.setText("语法构建失败,错误码：" + error.getErrorCode());
+                mGrammarID = null;
+                mContext.MSG_ISRErrorCallback("语法构建失败,错误码：" + error.getErrorCode());
             }
         }
     };
@@ -137,7 +153,7 @@ public class Qisr {
         @Override
         public void onInit(int code) {
             if (code != ErrorCode.SUCCESS) {
-                mContext.setText("初始化失败,错误码："+code);
+                mContext.MSG_ISRErrorCallback("初始化失败,错误码："+code);
             }
         }
     };
@@ -155,14 +171,14 @@ public class Qisr {
         @Override
         public void onResult(final RecognizerResult result, boolean isLast) {
             if (null != result) {
-                mContext.setText(getNearestResult(JsonParser.parseGrammarResult(result.getResultString())));
+                mContext.MSG_ISRSuccessCallback(getNearestResult(JsonParser.parseGrammarResult(result.getResultString())));
                /* if("cloud".equalsIgnoreCase(mEngineType)){
                     text =
                 }else {
                     text = JsonParser.parseLocalGrammarResult(result.getResultString());
                 }*/
             } else {
-                mContext.setText("没有匹配结果");
+                mContext.MSG_ISRSuccessCallback("");
             }
         }
 
@@ -180,7 +196,7 @@ public class Qisr {
 
         @Override
         public void onError(SpeechError error) {
-            mContext.setText("onError Code："	+ error.getErrorCode());
+            mContext.MSG_ISRErrorCallback("onError Code："	+ error.getErrorCode());
         }
 
         @Override

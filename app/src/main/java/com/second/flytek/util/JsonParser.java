@@ -48,7 +48,7 @@ public class JsonParser {
 					JSONObject obj = items.getJSONObject(j);
 					if(obj.getString("w").contains("nomatch"))
 					{
-						ret.append("没有匹配结果.");
+						ret.append("");//没有匹配结果
 						return ret.toString();
 					}
 					ret.append(obj.getString("w"));
@@ -57,7 +57,7 @@ public class JsonParser {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			ret.append("没有匹配结果.");
+			ret.append("");//没有匹配结果
 		} 
 		return ret.toString();
 	}
@@ -76,7 +76,7 @@ public class JsonParser {
 					JSONObject obj = items.getJSONObject(j);
 					if(obj.getString("w").contains("nomatch"))
 					{
-						ret.append("没有匹配结果.");
+						ret.append("");//没有匹配结果
 						return ret.toString();
 					}
 					ret.append(obj.getString("w"));
@@ -87,7 +87,7 @@ public class JsonParser {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			ret.append("没有匹配结果.");
+			ret.append("");//没有匹配结果
 		} 
 		return ret.toString();
 	}

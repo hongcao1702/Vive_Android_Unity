@@ -105,7 +105,7 @@ public class Qtts {
                 mReturn = mTts.synthesizeToUri(mLocalText, mTtsPath, mTtsListener);
             }
             if (mReturn != ErrorCode.SUCCESS) {
-                mContext.setText("语音合成失败,错误码: " + mReturn);
+                mContext.MSG_TTSErrorCallback("语音合成失败,错误码: " + mReturn);
             }
         }
     }
@@ -165,9 +165,9 @@ public class Qtts {
         @Override
         public void onCompleted(SpeechError error) {
             if (error == null) {
-                mContext.setText("播放完成");
+                mContext.MSG_TTSSuccessCallback("播放完成");
             } else if (error != null) {
-                mContext.setText(error.getPlainDescription(true));
+                mContext.MSG_TTSErrorCallback(error.getPlainDescription(true));
             }
         }
 
@@ -184,7 +184,7 @@ public class Qtts {
         public void onInit(int code) {
             Log.d(TAG, "InitListener init() code = " + code);
             if (code != ErrorCode.SUCCESS) {
-                mContext.setText("初始化失败,错误码："+code);
+                mContext.MSG_TTSErrorCallback("初始化失败,错误码："+code);
             } else {
                 // 初始化成功，之后可以调用startSpeaking方法
                 // 注：有的开发者在onCreate方法中创建完合成对象之后马上就调用startSpeaking进行合成，

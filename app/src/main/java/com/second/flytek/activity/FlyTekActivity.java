@@ -205,6 +205,12 @@ public class FlyTekActivity extends WVRUnityVRActivity {
         }
     }
 
+    public void MSG_BuildGrammar() {
+        if(mQisr != null) {
+
+        }
+    }
+
     /**
      * 设置tts完成后是否需要播放合成的语音
      * @param value
@@ -235,6 +241,42 @@ public class FlyTekActivity extends WVRUnityVRActivity {
         if(mUnityPlayer != null) {
             //FlyTek为Unity对应的GameObject名称
             mUnityPlayer.UnitySendMessage("FlyTek", "SetResult", data);
+        }
+    }
+
+    /**
+     * 设置TTS的回调
+     * @param data
+     */
+    public void MSG_TTSSuccessCallback(String data) {
+        if(mUnityPlayer != null) {
+            //FlyTek为Unity对应的GameObject名称
+            mUnityPlayer.UnitySendMessage("FlyTek", "TTSSuccessCallback", data);
+        }
+    }
+
+    public void MSG_TTSErrorCallback(String data) {
+        if(mUnityPlayer != null) {
+            //FlyTek为Unity对应的GameObject名称
+            mUnityPlayer.UnitySendMessage("FlyTek", "TTSErrorCallback", data);
+        }
+    }
+
+    /**
+     * 设置ISR的回调
+     * @param data
+     */
+    public void MSG_ISRSuccessCallback(String data) {
+        if(mUnityPlayer != null) {
+            //FlyTek为Unity对应的GameObject名称
+            mUnityPlayer.UnitySendMessage("FlyTek", "ISRSuccessCallback", data);
+        }
+    }
+
+    public void MSG_ISRErrorCallback(String data) {
+        if(mUnityPlayer != null) {
+            //FlyTek为Unity对应的GameObject名称
+            mUnityPlayer.UnitySendMessage("FlyTek", "ISRErrorCallback", data);
         }
     }
 
